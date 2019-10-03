@@ -86,7 +86,7 @@ cout << DerivedB(DerivedB(DerivedA(10))).getData() << endl;
 class DerivedB final : public Base
 {
   public:
-    // new addtions
+    // new additions
     DerivedB(const DerivedB &) = delete;
     DerivedB(DerivedB &&) = delete;
 
