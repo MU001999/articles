@@ -124,7 +124,7 @@ test.cpp:33:5: note: candidate constructor
 
 所以如何才能在 C++17 中在这种设计下通过这种方式正常使用呢?
 
-第一种可以显著增加代码程度的方式是, 手动添加强制转换:
+一种可以显著增加代码程度的方式是, 手动添加强制转换:
 
 ```cpp
 cout << DerivedB(static_cast<const Base &>(DerivedB(DerivedA(10)))).getData() << endl;
@@ -150,10 +150,30 @@ class DerivedB final : public Base
     const Base &pre_;
 };
 ...
-
 cout << DerivedB(DerivedB(DerivedA(10), 0), 0).getData() << endl;
 ```
 
-也是可以的, 至于哪种方式更好, 就见仁见智了
+当然以上两种都是在不涉及模板的情况下完成的, 但是都会对调用的方便性产生影响
 
-如果还有别的方式, 请指教!
+还有一种不会更改调用方式, 通过模板区分嵌套的相同类型的方式, 感谢 [91khr](https://www.zhihu.com/people/91khr) 提供:
+
+首先先将 DerivedB 变成一个类模板, 之后添加[模板推导指引](https://en.cppreference.com/w/cpp/language/class_template_argument_deduction)来实现嵌套区分
+
+```cpp
+...
+template <int Lv>
+class DerivedB;
+...
+template <typename Ty> DerivedB(Ty) -> DerivedB<0>;
+template <int Lv> DerivedB(DerivedB<Lv>) -> DerivedB<Lv + 1>;
+...
+cout << DerivedB(DerivedB(DerivedA(10))).getData() << endl;
+```
+
+在此条件之下, 结果与预期相同, 完美解决问题:
+
+```plaintext
+~> clang++ -std=c++17 test.cpp -o test
+~> ./test
+12
+```
