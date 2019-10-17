@@ -101,7 +101,7 @@ class DerivedB final : public Base
 };
 ```
 
-会发现依然可以通过编译并且运行结果与之前相同, 但是在 C++17 之前如果 delete 了这两个拷贝/移动构造函数, 会导致无法通过编译, 尽管有可以匹配 const Base & 类型的构造函数, 也依然不可以:
+会发现依然可以通过编译并且运行结果与之前相同 ( 因为在 C++17 中 Copy Elision 已经不再是可选项 ), 但是在 C++17 之前如果 delete 了这两个拷贝/移动构造函数, 会导致无法通过编译, 尽管有可以匹配 const Base & 类型的构造函数, 也依然不可以:
 
 ```plaintext
 test.cpp:45:13: error: functional-style cast from 'DerivedB'
@@ -122,7 +122,39 @@ test.cpp:33:5: note: candidate constructor
 1 error generated.
 ```
 
-所以如何才能在 C++17 中在这种设计下通过这种方式正常使用呢?
+感谢 [禽牙](https://www.zhihu.com/people/lei-yu-10-27) 在评论中提出, 事实上如果我们在尚未 delete 那两个构造函数通过如下的方式调用, 也依然不可行:
+
+```cpp
+DerivedA a(10);
+DerivedB b1(a);
+DerivedB b2(b1);
+cout << b2.getData() << endl;
+```
+
+结果依然是 11, 这是因为重载决议后其实我们调用的是匹配类型为 `const DerivedB &` 的构造函数, 同样如果我们约定在代码中都是用这样的方式编写程序, 我们就可以获得一种解决方式, 编写匹配类型的构造函数, 如下:
+
+```cpp
+...
+DerivedB(const DerivedB &pre) : pre_(pre) {}
+...
+```
+
+再通过声明中间变量的方式调用就可以获得正确结果, 但是通过纯右值的形式依然不行:
+
+```cpp
+...
+DerivedA a(10);
+DerivedB b1(a);
+DerivedB b2(b1);
+cout << b2.getData() << endl;
+// print 12
+...
+cout << DerivedB(DerivedB(DerivedA(10))).getData() << endl;
+// print 11
+...
+```
+
+所以如何才能在这种设计下通过这种方式正常使用呢?
 
 一种可以显著增加代码程度的方式是, 手动添加强制转换:
 
