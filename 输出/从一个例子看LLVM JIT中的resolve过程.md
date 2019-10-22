@@ -1,0 +1,1 @@
+在学习 LLVM 的第一阶段, 其实是把 [LLVM 官方教程里的 Kaleidoscope 语言](https://llvm.org/docs/tutorial/MyFirstLanguageFrontend/index.html)实现了一遍, 然后在[第四章](https://llvm.org/docs/tutorial/MyFirstLanguageFrontend/LangImpl04.html)添加了 JIT 支持之后遇到了这个与我直觉不符的问题
