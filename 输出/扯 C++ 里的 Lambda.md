@@ -136,7 +136,7 @@ struct lambda_traits : lambda_traits_base<decltype(&Func::operator())> {};
 
 这样一来就可以了, 不过还有一种特殊情况, 比如说我们有一个这样类似提供了 template operator() 的类:
 
-```
+```cpp
 struct Foo
 {
     template<typename ...Args>
