@@ -1,0 +1,3 @@
+[submodule "读书笔记/《Type Theory and Formal Proof》"]
+	path = 读书笔记/《Type Theory and Formal Proof》
+	url = https://github.com/MU001999/ttfp-notes.git
