@@ -1,3 +1,8 @@
+---
+title: 通过 call-cc 给 Ice 实现 Coroutine
+date: 2020/02/24
+---
+
 前两天给 Ice 加了 call/cc, 为此还重构了一波, 实现 call/cc 还是因为看了轮子哥的大专系列(
 
 里边说提供 continuation 语言实现 Coroutine 起来很轻松, 后来又查了一些资料, 都说 continuation 表达能力很强, 就实现了一手, 调用方式完全等同 call/cc, 既然是看 Coroutine 才要实现 call/cc, 那实现了之后当然要用 call/cc 实现一手 Coroutine 了(

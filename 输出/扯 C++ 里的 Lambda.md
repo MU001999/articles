@@ -1,3 +1,8 @@
+---
+title: 扯 C++ 里的 Lambda
+date: 2020/03/17
+---
+
 之前写(抄) parsec 的时候, 在重载 `operator>>` 的时候, `operator>>` 需要接收一个 lambda, 之后返回一个 `Component<R>`, 其中 R 是接收 lambda 的返回值类型, 所以就要搞到 lambda 对应的函数类型
 
 在一开始我是直接用 `std::function` 做的, 但是众所周知, 下面这样的写法是匹配不了的:

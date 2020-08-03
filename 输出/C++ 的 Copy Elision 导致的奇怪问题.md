@@ -1,3 +1,8 @@
+---
+title: C++ 的 Copy Elision 导致的奇怪问题
+date: 2019/10/02
+---
+
 最近写设计模式作业的时候, 有一个作业是实现[装饰器模式 (Decorator Pattern)](https://en.wikipedia.org/wiki/Decorator_pattern), 由于我不会 Java, 所以只能用 C++ 来实现 :)
 
 在这个背景下, 会有简单(表意)的几个类, 如下:
